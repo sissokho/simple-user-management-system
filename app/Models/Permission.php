@@ -11,7 +11,7 @@ class Permission extends Model
     use HasFactory;
 
     /** @var array<int, string> */
-    protected array $fillable = [
+    protected $fillable = [
         'name',
     ];
 

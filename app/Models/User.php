@@ -18,7 +18,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected array $fillable = [
+    protected $fillable = [
         'name',
         'email',
         'password',
@@ -30,7 +30,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected array $hidden = [
+    protected $hidden = [
         'password',
         'remember_token',
     ];
@@ -40,12 +40,28 @@ class User extends Authenticatable
      *
      * @var array<string, string>
      */
-    protected array  $casts = [
+    protected $casts = [
         'email_verified_at' => 'datetime',
     ];
 
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function assignRole(Role $role): void
+    {
+        $this->role()->associate($role);
+        $this->save();
+    }
+
+    public function hasRole(string $role): bool
+    {
+        return $this->role->name === $role;
+    }
+
+    public function hasPermissionTo(string $permission): bool
+    {
+        return (bool) $this->role()->whereRelation('permissions', 'name', $permission)->first();
     }
 }

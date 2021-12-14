@@ -12,7 +12,7 @@ class Role extends Model
     use HasFactory;
 
     /** @var array<int, string> */
-    protected array $fillable = [
+    protected $fillable = [
         'name',
     ];
 
@@ -24,5 +24,14 @@ class Role extends Model
     public function permissions(): BelongsToMany
     {
         return $this->belongsToMany(Permission::class, 'role_has_permissions');
+    }
+
+    public function givePermissionTo(string $permission): void
+    {
+        $this->permissions()->attach(
+            Permission::query()
+                ->where('name', $permission)
+                ->value('id')
+        );
     }
 }
