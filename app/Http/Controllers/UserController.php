@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserCreated;
+use App\Http\Requests\StoreUserRequest;
 use App\Models\Role;
+use App\Models\User;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -17,5 +22,23 @@ class UserController extends Controller
         return view('users.create', [
             'roles' => $roles
         ]);
+    }
+
+    public function store(StoreUserRequest $request): RedirectResponse
+    {
+        $validated = $request->validated();
+
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'role_id' => $validated['role'],
+            'password' => Str::random(60),
+        ]);
+
+        event(new UserCreated($user));
+
+        return redirect()
+            ->route('dashboard')
+            ->with('status', 'The user was successfully created! An email has been sent to reset his/her password.');
     }
 }

@@ -17,6 +17,11 @@
                 <x-button>
                     <a href="{{ route('users.create') }}">Create a new user</a>
                 </x-button>
+
+                <!-- Session Status -->
+                <div class="mt-3 text-center">
+                    <x-auth-session-status class="mb-4" :status="session('status')" />
+                </div>
             @endrole
         </div>
     </div>

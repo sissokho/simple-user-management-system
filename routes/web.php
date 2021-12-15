@@ -26,4 +26,7 @@ Route::get('/users/create', [UserController::class, 'create'])
     ->middleware(['auth', 'role:admin'])
     ->name('users.create');
 
+Route::post('/users/create', [UserController::class, 'store'])
+    ->middleware(['auth', 'role:admin']);
+
 require __DIR__ . '/auth.php';
