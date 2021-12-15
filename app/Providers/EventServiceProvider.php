@@ -25,6 +25,9 @@ class EventServiceProvider extends ServiceProvider
         UserCreated::class => [
             SendPasswordResetLink::class,
         ],
+        PasswordReset::class => [
+            MarkEmailAsVerified::class,
+        ],
     ];
 
     /**
