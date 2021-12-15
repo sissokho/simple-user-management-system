@@ -23,10 +23,10 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::get('/users/create', [UserController::class, 'create'])
-    ->middleware(['auth', 'role:admin'])
+    ->middleware(['auth', 'role:admin', 'verified'])
     ->name('users.create');
 
 Route::post('/users/create', [UserController::class, 'store'])
-    ->middleware(['auth', 'role:admin']);
+    ->middleware(['auth', 'role:admin', 'verified']);
 
 require __DIR__ . '/auth.php';
