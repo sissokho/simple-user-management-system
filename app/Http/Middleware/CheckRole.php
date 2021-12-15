@@ -16,7 +16,7 @@ class CheckRole
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next, string $role): Response|never
+    public function handle(Request $request, Closure $next, string $role): Response|RedirectResponse
     {
         if (!auth()->user()->hasRole($role) && !auth()->user()->hasRole('super-admin')) {
             abort(Response::HTTP_FORBIDDEN);
