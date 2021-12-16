@@ -19,11 +19,11 @@
                 </x-button>
 
                 <!-- Session Status -->
-                <div class="mt-3 text-center">
-                    <x-auth-session-status class="mb-4" :status="session('status')" />
-                </div>
+                <x-auth-session-status class="mt-3 text-center" :status="session('status')" />
 
-                <div class="flex flex-col">
+                <x-auth-validation-errors class="mt-3 text-center" :errors="$errors" />
+
+                <div class="flex flex-col mt-5">
                     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                         <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                             <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
@@ -76,9 +76,24 @@
                                                     {{ $user->role->name }}
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                    <a href="#" class="text-purple-600 hover:text-indigo-900">Reset password link</a>
+                                                    @if (!$user->hasVerifiedEmail())
+                                                        <a
+                                                            href="#"
+                                                            class="text-purple-600 hover:text-indigo-900"
+                                                            onclick="event.preventDefault();
+                                                                        document.getElementById('password-reset-form-{{ $user->id }}').submit();"
+                                                        >
+                                                            Reset password link
+                                                        </a>
+                                                        <form action="{{ route('users.resetPassworkLink') }}" method="POST" id="password-reset-form-{{ $user->id }}" class="hidden">
+                                                            @csrf
+                                                            <input type="hidden" name="email" value="{{ $user->email }}">
+                                                        </form>
+                                                    @endif
+
                                                     <a href="#" class="ml-2 text-indigo-600 hover:text-indigo-900">Edit</a>
                                                     <a href="#" class="ml-2 text-red-600 hover:text-indigo-900">Delete</a>
+
                                                 </td>
                                             </tr>
                                         @endforeach

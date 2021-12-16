@@ -30,4 +30,8 @@ Route::get('/users/create', [UserController::class, 'create'])
 Route::post('/users/create', [UserController::class, 'store'])
     ->middleware(['auth', 'role:admin', 'verified']);
 
+Route::post('/users/resend-reset-link', [UserController::class, 'resendPasswordResetLink'])
+    ->middleware(['auth', 'role:admin', 'verified'])
+    ->name('users.resetPassworkLink');
+
 require __DIR__ . '/auth.php';
