@@ -20,7 +20,7 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', DashboardController::class)
-    ->middleware(['auth'])
+    ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
 Route::get('/users/create', [UserController::class, 'create'])
