@@ -76,21 +76,24 @@
                                                     {{ $user->role->name }}
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                    <a
-                                                        href="#"
-                                                        class="text-purple-600 hover:text-indigo-900"
-                                                        onclick="event.preventDefault();
-                                                                    document.getElementById('password-reset-form-{{ $user->id }}').submit();"
-                                                    >
-                                                        Reset password link
-                                                    </a>
+                                                    @if (!$user->hasVerifiedEmail())
+                                                        <a
+                                                            href="#"
+                                                            class="text-purple-600 hover:text-indigo-900"
+                                                            onclick="event.preventDefault();
+                                                                        document.getElementById('password-reset-form-{{ $user->id }}').submit();"
+                                                        >
+                                                            Reset password link
+                                                        </a>
+                                                        <form action="{{ route('users.resetPassworkLink') }}" method="POST" id="password-reset-form-{{ $user->id }}" class="hidden">
+                                                            @csrf
+                                                            <input type="hidden" name="email" value="{{ $user->email }}">
+                                                        </form>
+                                                    @endif
+
                                                     <a href="#" class="ml-2 text-indigo-600 hover:text-indigo-900">Edit</a>
                                                     <a href="#" class="ml-2 text-red-600 hover:text-indigo-900">Delete</a>
 
-                                                    <form action="{{ route('users.resetPassworkLink') }}" method="POST" id="password-reset-form-{{ $user->id }}" class="hidden">
-                                                        @csrf
-                                                        <input type="hidden" name="email" value="{{ $user->email }}">
-                                                    </form>
                                                 </td>
                                             </tr>
                                         @endforeach
