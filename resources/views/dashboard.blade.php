@@ -19,11 +19,11 @@
                 </x-button>
 
                 <!-- Session Status -->
-                <div class="mt-3 text-center">
-                    <x-auth-session-status class="mb-4" :status="session('status')" />
-                </div>
+                <x-auth-session-status class="mt-3 text-center" :status="session('status')" />
 
-                <div class="flex flex-col">
+                <x-auth-validation-errors class="mt-3 text-center" :errors="$errors" />
+
+                <div class="flex flex-col mt-5">
                     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                         <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                             <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
