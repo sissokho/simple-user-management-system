@@ -43,6 +43,18 @@ class UserController extends Controller
             ->with('status', 'The user was successfully created! An email has been sent to reset his/her password.');
     }
 
+    public function edit(User $user): View
+    {
+        $roles = Role::query()
+            ->where('name', '<>', 'super-admin')
+            ->get();
+
+        return view('users.edit', [
+            'user' => $user->load('role'),
+            'roles' => $roles
+        ]);
+    }
+
     public function resendPasswordResetLink(Request $request): RedirectResponse
     {
         $request->validate([
