@@ -43,7 +43,7 @@ class UserController extends Controller
             ->with('status', 'The user was successfully created! An email has been sent to reset his/her password.');
     }
 
-    public function resendPasswordResetLink(Request $request)
+    public function resendPasswordResetLink(Request $request): RedirectResponse
     {
         $request->validate([
             'email' => ['required', 'email'],
