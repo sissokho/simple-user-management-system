@@ -64,7 +64,7 @@ class UserController extends Controller
 
         if (!auth()->user()->is($user)) {
             $user->fill([
-                'role_id' => $request->validated()['role']
+                'role_id' => $request->role
             ]);
         }
 
