@@ -35,6 +35,11 @@ Route::get('/users/{user}/edit', [UserController::class, 'edit'])
     ->can('update', 'user')
     ->name('users.edit');
 
+Route::put('/users/{user}', [UserController::class, 'update'])
+    ->middleware(['auth', 'verified'])
+    ->can('update', 'user')
+    ->name('users.update');
+
 Route::post('/users/resend-reset-link', [UserController::class, 'resendPasswordResetLink'])
     ->middleware(['auth', 'role:admin', 'verified'])
     ->name('users.resetPassworkLink');

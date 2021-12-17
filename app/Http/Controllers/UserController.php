@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\UserCreated;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
@@ -53,6 +54,21 @@ class UserController extends Controller
             'user' => $user->load('role'),
             'roles' => $roles
         ]);
+    }
+
+    public function update(UpdateUserRequest $request, User $user): RedirectResponse
+    {
+        $user->forceFill($request->safe()->except(['role']));
+
+        if (!auth()->user()->is($user)) {
+            $user->forceFill([
+                'role_id' => $request->validated()['role']
+            ]);
+        }
+
+        $user->save();
+
+        return back()->with('status', 'Account informations have been successfully updated!');
     }
 
     public function resendPasswordResetLink(Request $request): RedirectResponse
