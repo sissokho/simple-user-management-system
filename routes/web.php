@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UpdatePasswordController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,21 @@ Route::get('/users/create', [UserController::class, 'create'])
 
 Route::post('/users/create', [UserController::class, 'store'])
     ->middleware(['auth', 'role:admin', 'verified']);
+
+Route::get('/users/{user}/edit', [UserController::class, 'edit'])
+    ->middleware(['auth', 'verified'])
+    ->can('update', 'user')
+    ->name('users.edit');
+
+Route::put('/users/{user}', [UserController::class, 'update'])
+    ->middleware(['auth', 'verified'])
+    ->can('update', 'user')
+    ->name('users.update');
+
+Route::put('/users/{user}/password', UpdatePasswordController::class)
+    ->middleware(['auth', 'verified'])
+    ->can('update-password', 'user')
+    ->name('users.updatePassword');
 
 Route::post('/users/resend-reset-link', [UserController::class, 'resendPasswordResetLink'])
     ->middleware(['auth', 'role:admin', 'verified'])

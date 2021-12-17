@@ -91,7 +91,7 @@
                                                         </form>
                                                     @endif
 
-                                                    <a href="#" class="ml-2 text-indigo-600 hover:text-indigo-900">Edit</a>
+                                                    <a href="{{ route('users.edit', ['user' => $user->id]) }}" class="ml-2 text-indigo-600 hover:text-indigo-900">Edit</a>
                                                     <a href="#" class="ml-2 text-red-600 hover:text-indigo-900">Delete</a>
 
                                                 </td>

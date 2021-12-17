@@ -9,7 +9,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class User extends
+
+Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -63,5 +65,12 @@ class User extends Authenticatable
     public function hasPermissionTo(string $permission): bool
     {
         return (bool) $this->role()->whereRelation('permissions', 'name', $permission)->first();
+    }
+
+    public function markEmailAsNotVerified(): void
+    {
+        $this->forceFill([
+            'email_verified_at' => null
+        ])->save();
     }
 }
