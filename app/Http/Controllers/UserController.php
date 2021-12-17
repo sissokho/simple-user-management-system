@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Events\UserCreated;
+use App\Events\UserEmailChanged;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -58,15 +60,20 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-        $user->forceFill($request->safe()->except(['role']));
+        $user->fill($request->safe()->except(['role']));
 
         if (!auth()->user()->is($user)) {
-            $user->forceFill([
+            $user->fill([
                 'role_id' => $request->validated()['role']
             ]);
         }
 
         $user->save();
+
+        if ($user->wasChanged('email')) {
+            $user->markEmailAsNotVerified();
+            event(new Registered($user)); // Use built-in registered event to send an email verification notification
+        }
 
         return back()->with('status', 'Account informations have been successfully updated!');
     }
