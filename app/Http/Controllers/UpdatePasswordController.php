@@ -12,7 +12,7 @@ use Illuminate\Validation\ValidationException;
 
 class UpdatePasswordController extends Controller
 {
-    public function __invoke(UpdatePasswordRequest $request, User $user): RedirectResponse|never
+    public function __invoke(UpdatePasswordRequest $request, User $user): RedirectResponse
     {
         if (!Hash::check($request->current_password, $user->password)) {
             return back()->withErrors([
