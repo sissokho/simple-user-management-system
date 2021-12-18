@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-12" x-data="{ openDialog: false, selectedUserId: 0 }">
         <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
             @role('user')
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -14,6 +14,39 @@
                     </div>
                 </div>
             @else
+                <!-- Delete confirmaton dialog -->
+                <div
+                    class="flex justify-center items-center absolute inset-0 bg-black bg-opacity-50 z-10"
+                    x-show="openDialog"
+                    x-trap.inert.noscroll="openDialog"
+                    x-on:click="openDialog = false"
+                    x-on:keyup.escape="openDialog = false"
+                >
+                    <div class="bg-white w-72 p-3 rounded">
+                        <p class="font-semibold text-center">Are you sure you want to delete this account ?</p>
+
+                        <div class="mt-7 text-center">
+                            <button
+                                class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                                x-on:click="$refs.deleteForm.submit()"
+                            >
+                                Delete
+                            </button>
+                            <button
+                                class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
+                                x-on:click="openDialog = false"
+                            >
+                                Cancel
+                            </button>
+
+                            <form x-bind:action="`/users/${selectedUserId}`" method="POST" class="hidden" x-ref="deleteForm">
+                                @csrf
+                                @method('DELETE')
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
                 <x-button>
                     <a href="{{ route('users.create') }}">Create a new user</a>
                 </x-button>
@@ -92,8 +125,16 @@
                                                     @endif
 
                                                     <a href="{{ route('users.edit', ['user' => $user->id]) }}" class="ml-2 text-indigo-600 hover:text-indigo-900">Edit</a>
-                                                    <a href="#" class="ml-2 text-red-600 hover:text-indigo-900">Delete</a>
-
+                                                    <a
+                                                        href="{{ route('users.destroy', ['user' => $user]) }}"
+                                                        class="ml-2 text-red-600 hover:text-indigo-900"
+                                                        x-on:click.prevent="
+                                                            selectedUserId = {{ $user->id }};
+                                                            openDialog = true;
+                                                        "
+                                                    >
+                                                        Delete
+                                                    </a>
                                                 </td>
                                             </tr>
                                         @endforeach

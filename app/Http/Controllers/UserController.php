@@ -78,6 +78,13 @@ class UserController extends Controller
         return back()->with('status', 'Account informations have been successfully updated!');
     }
 
+    public function destroy(User $user): RedirectResponse
+    {
+        $user->delete();
+
+        return back()->with('status', "User's account was successfully deleted!");
+    }
+
     public function resendPasswordResetLink(Request $request): RedirectResponse
     {
         $request->validate([

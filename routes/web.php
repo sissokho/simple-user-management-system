@@ -41,6 +41,11 @@ Route::put('/users/{user}', [UserController::class, 'update'])
     ->can('update', 'user')
     ->name('users.update');
 
+Route::delete('/users/{user}', [UserController::class, 'destroy'])
+    ->middleware(['auth', 'role:admin', 'verified'])
+    ->can('delete', 'user')
+    ->name('users.destroy');
+
 Route::put('/users/{user}/password', UpdatePasswordController::class)
     ->middleware(['auth', 'verified'])
     ->can('update-password', 'user')
