@@ -64,7 +64,7 @@ Authenticatable implements MustVerifyEmail
 
     public function hasPermissionTo(string $permission): bool
     {
-        return (bool) $this->role()->whereRelation('permissions', 'name', $permission)->first();
+        return !is_null($this->role()->whereRelation('permissions', 'name', $permission)->first());
     }
 
     public function markEmailAsNotVerified(): void
