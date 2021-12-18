@@ -9,10 +9,10 @@
         <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                        <!-- Validation Errors -->
+                    <!-- Validation Errors -->
                     <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-                    <form method="POST" action="{{ route('users.create') }}">
+                    <form method="POST" action="{{ route('users.store') }}">
                         @csrf
 
                         <!-- Name -->
@@ -35,9 +35,9 @@
 
                             <select name="role" id="role" class="rounded-md w-full">
                                 @foreach ($roles as $role)
-                                    @can('create', [\App\Models\User::class, $role->name])
-                                        <option value="{{ $role->id }}">{{ ucwords($role->name) }}</option>
-                                    @endcan
+                                @can('create', [\App\Models\User::class, $role->name])
+                                <option value="{{ $role->id }}">{{ ucwords($role->name) }}</option>
+                                @endcan
                                 @endforeach
                             </select>
                         </div>

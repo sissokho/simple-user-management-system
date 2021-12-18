@@ -24,35 +24,38 @@ Route::get('/dashboard', DashboardController::class)
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-Route::get('/users/create', [UserController::class, 'create'])
-    ->middleware(['auth', 'role:admin', 'verified'])
-    ->name('users.create');
+Route::middleware(['auth', 'verified'])
+    ->prefix('users')
+    ->name('users.')
+    ->group(function () {
+        Route::get('/create', [UserController::class, 'create'])
+            ->middleware(['role:admin'])
+            ->name('create');
 
-Route::post('/users/create', [UserController::class, 'store'])
-    ->middleware(['auth', 'role:admin', 'verified']);
+        Route::post('/', [UserController::class, 'store'])
+            ->middleware(['role:admin'])
+            ->name('store');
 
-Route::get('/users/{user}/edit', [UserController::class, 'edit'])
-    ->middleware(['auth', 'verified'])
-    ->can('update', 'user')
-    ->name('users.edit');
+        Route::get('/{user}/edit', [UserController::class, 'edit'])
+            ->can('update', 'user')
+            ->name('edit');
 
-Route::put('/users/{user}', [UserController::class, 'update'])
-    ->middleware(['auth', 'verified'])
-    ->can('update', 'user')
-    ->name('users.update');
+        Route::put('/{user}', [UserController::class, 'update'])
+            ->can('update', 'user')
+            ->name('update');
 
-Route::delete('/users/{user}', [UserController::class, 'destroy'])
-    ->middleware(['auth', 'role:admin', 'verified'])
-    ->can('delete', 'user')
-    ->name('users.destroy');
+        Route::delete('/{user}', [UserController::class, 'destroy'])
+            ->middleware(['role:admin'])
+            ->can('delete', 'user')
+            ->name('destroy');
 
-Route::put('/users/{user}/password', UpdatePasswordController::class)
-    ->middleware(['auth', 'verified'])
-    ->can('update-password', 'user')
-    ->name('users.updatePassword');
+        Route::put('/{user}/password', UpdatePasswordController::class)
+            ->can('update-password', 'user')
+            ->name('updatePassword');
 
-Route::post('/users/resend-reset-link', [UserController::class, 'resendPasswordResetLink'])
-    ->middleware(['auth', 'role:admin', 'verified'])
-    ->name('users.resetPassworkLink');
+        Route::post('/resend-reset-link', [UserController::class, 'resendPasswordResetLink'])
+            ->middleware(['role:admin'])
+            ->name('resetPassworkLink');
+    });
 
 require __DIR__ . '/auth.php';
