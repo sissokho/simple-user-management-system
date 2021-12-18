@@ -16,7 +16,7 @@
             @else
                 <!-- Delete confirmaton dialog -->
                 <div
-                    class="flex justify-center items-center absolute inset-0 bg-black bg-opacity-50"
+                    class="flex justify-center items-center absolute inset-0 bg-black bg-opacity-50 z-10"
                     x-show="openDialog"
                     x-trap.inert.noscroll="openDialog"
                     x-on:click="openDialog = false"
